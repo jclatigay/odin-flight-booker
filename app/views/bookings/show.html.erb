@@ -1,0 +1,26 @@
+<h1>Booking Confirmation</h1>
+
+<div class="card mb-4">
+  <div class="card-body">
+    <h5>Flight Details</h5>
+    <p>
+      From: <%= @booking.flight.departure_airport.code %> →
+      To: <%= @booking.flight.arrival_airport.code %>
+    </p>
+    <p>Date: <%= @booking.flight.start.strftime("%B %d, %Y") %></p>
+    <p>Duration: <%= @booking.flight.duration %> minutes</p>
+  </div>
+</div>
+
+<h2>Passengers</h2>
+<% @booking.passengers.each_with_index do |passenger, index| %>
+  <div class="card mb-3">
+    <div class="card-body">
+      <h5>Passenger <%= index + 1 %></h5>
+      <p>Name: <%= passenger.name %></p>
+      <p>Email: <%= passenger.email %></p>
+    </div>
+  </div>
+<% end %>
+
+<%= link_to "Book Another Flight", root_path, class: "btn btn-primary" %>
