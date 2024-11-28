@@ -1,0 +1,61 @@
+<div class="mt-2 mb-4">
+  <h1>Flights</h1>
+</div>
+
+  <%= form_with url: root_path, method: :get do |f| %>
+  <div class="mb-2">
+    <%= f.label :departure_airport_id, "From:" %>
+    <%= f.select :departure_airport_id, 
+                 @airport_options,
+                 { prompt: "Select departure airport", selected: params[:departure_airport_id] } %>
+  </div>
+
+  <div class="mb-2">
+    <%= f.label :arrival_airport_id, "To:" %>
+    <%= f.select :arrival_airport_id, 
+                 @airport_options,
+                 { prompt: "Select arrival airport", selected: params[:arrival_airport_id] } %>
+  </div>
+
+  <div class="mb-2">
+    <%= f.label :start, "Date:" %>
+    <%= f.select :start, 
+                 @flight_dates.map { |date| [date.strftime("%B %d, %Y"), date] },
+                 { prompt: "Select departure date", selected: params[:start] } %>
+  </div>
+
+  <div class="mb-2">
+    <%= f.label :num_passengers, "Number of Passengers:" %>
+    <%= f.select :num_passengers, 
+                 options_for_select((1..4).map { |n| [pluralize(n, "passenger"), n] }),
+                 { prompt: "Select number of passengers", selected: params[:num_passengers] } %>
+  </div>
+
+  <div class="mt-3">
+    <%= f.submit "Search Flights", class: "btn btn-primary" %>
+    <%= link_to "Reset", root_path, class: "btn btn-secondary ms-2" %>
+  </div>
+<% end %>
+
+<% if @flights.present? %>
+  <div class="mt-4">
+    <h2>Available Flights</h2>
+    
+    <% @flights.each do |flight| %>
+      <div class="card mb-2">
+        <div class="card-body">
+          <p>
+            From: <%= flight.departure_airport.code %> →
+            To: <%= flight.arrival_airport.code %>
+          </p>
+          <p>Date: <%= flight.start.strftime("%B %d, %Y") %></p>
+          <p>Duration: <%= flight.duration %> minutes</p>
+        </div>
+      </div>
+    <% end %>
+  </div>
+<% elsif params[:commit] %>
+  <div class="mt-4 alert alert-info">
+    No flights found matching your search criteria.
+  </div>
+<% end %>
