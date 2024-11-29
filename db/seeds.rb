@@ -12,6 +12,15 @@ Airport.create(code: "SFO")
 Airport.create(code: "NYC")
 Airport.create(code: "LAX")
 Airport.create(code: "ATL")
+Airport.create(code: "PHL")
+Airport.create(code: "JPN")
+
+Flight.create(
+  departure_airport_id: Airport.find_by(code: "PHL").id,
+  arrival_airport_id: Airport.find_by(code: "JPN").id,
+  start: "2025-06-28 05:00:00",
+  duration: 210
+)
 
 Flight.create(
   departure_airport_id: Airport.find_by(code: "SFO").id,

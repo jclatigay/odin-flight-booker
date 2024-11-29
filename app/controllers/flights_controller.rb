@@ -4,18 +4,24 @@ class FlightsController < ApplicationController
     @flight_dates = Flight.order(:start).pluck(:start).map(&:to_date).uniq
 
     @flights = Flight.all
+    @flights = apply_filters(@flights)
+    @flights = @flights.order(sort_column => sort_direction)
+  end
 
-    if params[:departure_airport_id].present?
-      @flights = @flights.where(departure_airport_id: params[:departure_airport_id])
-    end
+  private
 
-    if params[:arrival_airport_id].present?
-      @flights = @flights.where(arrival_airport_id: params[:arrival_airport_id])
-    end
+  def apply_filters(flights)
+    flights = flights.where(departure_airport_id: params[:departure_airport_id]) if params[:departure_airport_id].present?
+    flights = flights.where(arrival_airport_id: params[:arrival_airport_id]) if params[:arrival_airport_id].present?
+    flights = flights.where("DATE(start) = ?", Date.parse(params[:start])) if params[:start].present?
+    flights
+  end
 
-    if params[:start].present?
-      date = Date.parse(params[:start])
-      @flights = @flights.where("DATE(start) = ?", date)
-    end
+  def sort_column
+    %w[start duration].include?(params[:sort]) ? params[:sort] : "start"
+  end
+
+  def sort_direction
+    %w[asc desc].include?(params[:direction]) ? params[:direction] : "asc"
   end
 end

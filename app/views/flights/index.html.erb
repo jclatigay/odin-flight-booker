@@ -6,29 +6,32 @@
   <div class="mb-2">
     <%= f.label :departure_airport_id, "From:" %>
     <%= f.select :departure_airport_id, 
-                 @airport_options,
-                 { prompt: "Select departure airport", selected: params[:departure_airport_id] } %>
+                 options_for_select(@airport_options, params[:departure_airport_id]),
+                 { prompt: "Select departure airport" } %>
   </div>
 
   <div class="mb-2">
     <%= f.label :arrival_airport_id, "To:" %>
     <%= f.select :arrival_airport_id, 
-                 @airport_options,
-                 { prompt: "Select arrival airport", selected: params[:arrival_airport_id] } %>
+                 options_for_select(@airport_options, params[:arrival_airport_id]),
+                 { prompt: "Select arrival airport" } %>
   </div>
 
   <div class="mb-2">
     <%= f.label :start, "Date:" %>
     <%= f.select :start, 
-                 @flight_dates.map { |date| [date.strftime("%B %d, %Y"), date] },
-                 { prompt: "Select departure date", selected: params[:start] } %>
+                 options_for_select(@flight_dates.map { |date| [date.strftime("%B %d, %Y"), date] },
+                                  params[:start]),
+                 { prompt: "Select departure date" } %>
   </div>
 
   <div class="mb-2">
     <%= f.label :num_passengers, "Number of Passengers:" %>
     <%= f.select :num_passengers, 
-                 options_for_select((1..4).map { |n| [pluralize(n, "passenger"), n] }),
-                 { prompt: "Select number of passengers", selected: params[:num_passengers] } %>
+                 options_for_select((1..4).map { |n| [pluralize(n, "passenger"), n] }, 
+                                  params[:num_passengers]),
+                 { prompt: "Select number of passengers" },
+                 { required: true } %>
   </div>
 
   <div class="mt-3">
