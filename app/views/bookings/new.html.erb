@@ -17,35 +17,74 @@
   <%= form_with(model: @booking) do |f| %>
     <%= f.hidden_field :flight_id, value: @flight.id %>
     
-    <h4>Passenger Information</h4>
+    <div data-controller="passenger-form">
+      <h4>Passenger Information</h4>
 
-    <% if f.object.errors.any? %>
+      <% if f.object.errors.any? %>
         <div class="alert alert-danger">
-            <%= f.object.errors.full_messages.join(". ") %>
+          <%= f.object.errors.full_messages.join(". ") %>
         </div>
-    <% end %>
-    
-    <%= f.fields_for :passengers do |passenger_form| %>
-      <div class="card mb-3">
-        <div class="card-body">
-          <h5>Passenger <%= passenger_form.index + 1 %></h5>
-          
-          <div class="mb-3">
-            <%= passenger_form.label :name, class: "form-label" %>
-            <%= passenger_form.text_field :name, class: "form-control" %>
-          </div>
+      <% end %>
+      
+      <div data-passenger-form-target="container">
+        <%= f.fields_for :passengers do |passenger_form| %>
+          <div class="card mb-3">
+            <div class="card-body">
+              <div class="d-flex justify-content-between align-items-center mb-3">
+                <h5>Passenger <%= passenger_form.index + 1 %></h5>
+                <button type="button" class="btn btn-danger btn-sm" 
+                        data-action="click->passenger-form#removePassenger">
+                  Remove
+                </button>
+              </div>
+              
+              <div class="mb-3">
+                <%= passenger_form.label :name, class: "form-label" %>
+                <%= passenger_form.text_field :name, class: "form-control" %>
+              </div>
 
-          <div class="mb-3">
-            <%= passenger_form.label :email, class: "form-label" %>
-            <%= passenger_form.email_field :email, class: "form-control" %>
+              <div class="mb-3">
+                <%= passenger_form.label :email, class: "form-label" %>
+                <%= passenger_form.email_field :email, class: "form-control" %>
+              </div>
+            </div>
           </div>
-        </div>
+        <% end %>
       </div>
-    <% end %>
 
-    <div class="mt-3 mb-3">
-      <%= link_to "Back", root_path, class: "btn btn-secondary" %>
-      <%= f.submit "Continue to Booking", class: "btn btn-primary" %>
+      <button type="button" class="btn btn-secondary mb-3" 
+              data-action="click->passenger-form#addPassenger">
+        Add Passenger
+      </button>
+
+      <template data-passenger-form-target="template">
+        <div class="card mb-3">
+          <div class="card-body">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+              <h5>Passenger {index}</h5>
+              <button type="button" class="btn btn-danger btn-sm" 
+                      data-action="click->passenger-form#removePassenger">
+                Remove
+              </button>
+            </div>
+            
+            <div class="mb-3">
+              <label class="form-label">Name</label>
+              <input type="text" name="booking[passengers_attributes][{index}][name]" class="form-control">
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label">Email</label>
+              <input type="email" name="booking[passengers_attributes][{index}][email]" class="form-control">
+            </div>
+          </div>
+        </div>
+      </template>
+
+      <div class="mt-3 mb-3">
+        <%= link_to "Back", root_path, class: "btn btn-secondary" %>
+        <%= f.submit "Continue to Booking", class: "btn btn-primary" %>
+      </div>
     </div>
   <% end %>
 </div>
