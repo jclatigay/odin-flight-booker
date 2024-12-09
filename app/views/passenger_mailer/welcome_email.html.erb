@@ -1,0 +1,8 @@
+<h1>Welcome to the app <%= @passenger.name %></h1>
+<p>Thank you for booking with us. We hope you enjoy your flight.</p>
+<p>Your flight details are as follows:</p>
+<p>Departure: <%= @booking.flight.departure_airport.code %></p>
+<p>Arrival: <%= @booking.flight.arrival_airport.code %></p>
+<p>Date: <%= @booking.flight.start.strftime("%B %d, %Y") %></p>
+<p>Time: <%= @booking.flight.start.strftime("%I:%M %p") %></p>
+<p>Please fly with us again!</p>

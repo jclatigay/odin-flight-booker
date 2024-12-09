@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  get "passengers/create"
   resources :bookings, only: [ :new, :create, :show ]
 
   root to: "flights#index"
